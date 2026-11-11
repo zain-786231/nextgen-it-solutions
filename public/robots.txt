@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nextgenitsolutions.pages.dev/sitemap-index.xml
+Sitemap: https://nextgen-it-solutions.zainulabiden690.workers.dev/sitemap-index.xml
