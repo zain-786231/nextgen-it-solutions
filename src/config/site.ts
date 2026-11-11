@@ -65,7 +65,7 @@ export const site = {
   /** PLACEHOLDER — Google Analytics 4 measurement ID, e.g. 'G-XXXXXXXXXX' */
   ga4Id: null as string | null,
   /** PLACEHOLDER — Google Search Console HTML-tag verification token */
-  googleSiteVerification: null as string | null,
+  googleSiteVerification: 'bP9lYW-3eQhejNtmm28HkduCSxCUrRytXWZLjACZRcc',
 };
 
 export const nav = [
