@@ -1,0 +1,80 @@
+---
+/**
+ * Hand-built vector visuals (no external images, no licensing risk, ~1 KB each).
+ * Replace with real photography later by swapping this component for an
+ * <Image> — see docs/CONTENT_UPDATE_GUIDE.md.
+ */
+interface Props { kind: 'software' | 'network' | 'cctv' | 'pos' | 'scale' | 'code'; class?: string; label: string }
+const { kind, class: cls = '', label } = Astro.props;
+const id = `v${Math.random().toString(36).slice(2, 7)}`;
+---
+<div class:list={['relative overflow-hidden bg-gradient-to-br from-ink-900 to-ink-950', cls]} role="img" aria-label={label}>
+  <div class="grid-bg absolute inset-0"></div>
+  <div class="glow absolute -right-10 -top-10 size-56"></div>
+  <svg viewBox="0 0 400 240" class="relative h-full w-full" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    <defs>
+      <linearGradient id={`${id}g`} x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2878FF" /><stop offset="1" stop-color="#20D9E8" /></linearGradient>
+      <linearGradient id={`${id}s`} x1="0" y1="0" x2="0" y2="1"><stop stop-color="#1c2a40" /><stop offset="1" stop-color="#101827" /></linearGradient>
+    </defs>
+    {kind === 'software' || kind === 'pos' ? (
+      <g>
+        <rect x="70" y="30" width="260" height="165" rx="10" fill={`url(#${id}s)`} stroke="#2a3d5a" />
+        <rect x="70" y="30" width="260" height="22" rx="10" fill="#1c2a40" />
+        <circle cx="84" cy="41" r="3" fill="#2878FF" /><circle cx="95" cy="41" r="3" fill="#2a3d5a" /><circle cx="106" cy="41" r="3" fill="#2a3d5a" />
+        <rect x="82" y="64" width="54" height="118" rx="6" fill="#101827" />
+        {[0,1,2,3,4].map((i) => <rect x="90" y={74 + i * 20} width={i === 1 ? 38 : 30} height="7" rx="3.5" fill={i === 1 ? `url(#${id}g)` : '#2a3d5a'} />)}
+        <rect x="146" y="64" width="72" height="40" rx="6" fill="#101827" /><rect x="154" y="74" width="30" height="6" rx="3" fill="#2a3d5a" /><rect x="154" y="86" width="48" height="9" rx="3" fill="#F5F7FC" opacity=".85" />
+        <rect x="226" y="64" width="92" height="40" rx="6" fill="#101827" /><rect x="234" y="74" width="30" height="6" rx="3" fill="#2a3d5a" /><rect x="234" y="86" width="40" height="9" rx="3" fill="#20D9E8" opacity=".9" />
+        <rect x="146" y="112" width="172" height="70" rx="6" fill="#101827" />
+        <polyline points="156,168 180,150 204,158 228,132 252,140 276,122 306,128" fill="none" stroke={`url(#${id}g)`} stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        {[0,1,2,3,4,5,6].map((i) => <rect x={158 + i * 22} y={174 - (i * 7 % 30) - 6} width="8" height={(i * 7 % 30) + 6} rx="2" fill="#2878FF" opacity=".22" />)}
+      </g>
+    ) : kind === 'network' ? (
+      <g>
+        <rect x="80" y="120" width="240" height="44" rx="8" fill={`url(#${id}s)`} stroke="#2a3d5a" />
+        {Array.from({ length: 12 }).map((_, i) => <rect x={98 + i * 15} y="134" width="10" height="9" rx="1.5" fill="#080D18" stroke="#2a3d5a" />)}
+        {Array.from({ length: 12 }).map((_, i) => <circle cx={103 + i * 15} cy="151" r="1.8" fill={i % 3 === 0 ? '#2a3d5a' : '#20D9E8'} class="anim-pulse" style={`animation-delay:${i * 0.25}s`} />)}
+        <rect x="290" y="134" width="18" height="16" rx="2" fill="#2878FF" opacity=".5" />
+        <rect x="150" y="48" width="100" height="34" rx="17" fill={`url(#${id}s)`} stroke="#2a3d5a" />
+        <circle cx="200" cy="65" r="5" fill={`url(#${id}g)`} />
+        <path d="M184 40a24 24 0 0 1 32 0M189 32a34 34 0 0 1 22 0" fill="none" stroke="#20D9E8" stroke-width="2" stroke-linecap="round" class="anim-pulse" />
+        <path d="M200 82v38M140 120v-20h-50M260 120v-20h50" fill="none" stroke={`url(#${id}g)`} stroke-width="1.5" stroke-dasharray="4 4" />
+        <rect x="58" y="88" width="34" height="24" rx="5" fill="#141F30" stroke="#2a3d5a" /><rect x="308" y="88" width="34" height="24" rx="5" fill="#141F30" stroke="#2a3d5a" />
+        <circle cx="75" cy="100" r="3" fill="#2878FF" /><circle cx="325" cy="100" r="3" fill="#2878FF" />
+      </g>
+    ) : kind === 'cctv' ? (
+      <g>
+        <path d="M120 60h60l8 14h-76Z" fill="#1c2a40" stroke="#2a3d5a" />
+        <rect x="98" y="74" width="150" height="56" rx="16" fill={`url(#${id}s)`} stroke="#2a3d5a" transform="rotate(12 173 102)" />
+        <circle cx="240" cy="122" r="22" fill="#080D18" stroke="#2a3d5a" />
+        <circle cx="240" cy="122" r="13" fill="#101827" stroke={`url(#${id}g)`} stroke-width="2" />
+        <circle cx="236" cy="118" r="4" fill="#20D9E8" opacity=".8" />
+        <circle cx="140" cy="96" r="3" fill="#ef4444" class="anim-pulse" />
+        <path d="M262 112 L360 80 L360 200 L262 134Z" fill={`url(#${id}g)`} opacity=".08" />
+        <rect x="70" y="170" width="120" height="48" rx="6" fill="#101827" stroke="#2a3d5a" />
+        {[0,1,2,3].map((i) => <rect x={76 + (i % 2) * 58} y={176 + Math.floor(i / 2) * 20} width="52" height="16" rx="2" fill="#1c2a40" />)}
+        <circle cx="82" cy="182" r="2" fill="#ef4444" />
+      </g>
+    ) : kind === 'scale' ? (
+      <g>
+        <rect x="110" y="140" width="180" height="22" rx="6" fill={`url(#${id}s)`} stroke="#2a3d5a" />
+        <rect x="130" y="162" width="140" height="34" rx="6" fill="#101827" stroke="#2a3d5a" />
+        <rect x="150" y="170" width="70" height="18" rx="3" fill="#080D18" />
+        <text x="185" y="184" text-anchor="middle" font-family="monospace" font-size="13" fill="#20D9E8">12.450</text>
+        <text x="236" y="184" font-family="Inter, sans-serif" font-size="10" fill="#9AA9BD">kg</text>
+        <rect x="160" y="96" width="80" height="44" rx="6" fill="#1c2a40" stroke="#2a3d5a" />
+        <path d="M290 150 C 320 150 320 90 300 70" fill="none" stroke={`url(#${id}g)`} stroke-width="1.5" stroke-dasharray="4 4" />
+        <rect x="270" y="34" width="90" height="58" rx="6" fill={`url(#${id}s)`} stroke="#2a3d5a" />
+        <rect x="280" y="46" width="40" height="6" rx="3" fill="#2a3d5a" /><rect x="280" y="58" width="60" height="6" rx="3" fill={`url(#${id}g)`} /><rect x="280" y="70" width="50" height="6" rx="3" fill="#2a3d5a" />
+      </g>
+    ) : (
+      <g>
+        <rect x="70" y="36" width="260" height="168" rx="10" fill={`url(#${id}s)`} stroke="#2a3d5a" />
+        {[['#2878FF', 60, 0], ['#9AA9BD', 110, 16], ['#20D9E8', 80, 16], ['#9AA9BD', 140, 32], ['#2878FF', 70, 32], ['#9AA9BD', 120, 16], ['#20D9E8', 90, 0]].map(([c, w, x], i) => (
+          <rect x={92 + Number(x)} y={60 + i * 18} width={w} height="7" rx="3.5" fill={String(c)} opacity={c === '#9AA9BD' ? 0.35 : 0.85} />
+        ))}
+        <path d="M260 92l-14 14 14 14M290 92l14 14-14 14" fill="none" stroke={`url(#${id}g)`} stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+    )}
+  </svg>
+</div>

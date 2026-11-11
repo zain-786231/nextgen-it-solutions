@@ -1,0 +1,15 @@
+---
+import { site } from '../config/site';
+const gid = `lg-${Math.random().toString(36).slice(2, 7)}`;
+---
+<a href="/" class="group flex items-center gap-2.5">
+  <svg viewBox="0 0 64 64" class="size-9 shrink-0" aria-hidden="true">
+    <rect width="64" height="64" rx="14" fill="#141F30" stroke="#22324a" />
+    <path d="M18 45V19l28 26V19" fill="none" stroke={`url(#${gid})`} stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+    <defs><linearGradient id={gid} x1="0" y1="0" x2="64" y2="64"><stop stop-color="#2878FF" /><stop offset="1" stop-color="#20D9E8" /></linearGradient></defs>
+  </svg>
+  <span class="whitespace-nowrap leading-tight">
+    <span class="block text-[15px] font-semibold tracking-tight">NextGen <span class="text-cyan">I.T</span></span>
+    <span class="block text-[10px] font-medium uppercase tracking-[0.22em] text-muted">Solutions</span>
+  </span>
+</a>

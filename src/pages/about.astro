@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import CTA from '../components/CTA.astro';
+import { CodeXml, Network, Cctv, Keyboard, Target, Compass, Handshake } from '@lucide/astro';
+import { site } from '../config/site';
+const areas = [
+  { i: CodeXml, t: 'Software', d: 'DukaanPRO POS, weighing scale software and custom business applications.', href: '/software/' },
+  { i: Network, t: 'Networking', d: 'Routers, switches, access points, bridges and structured networking.', href: '/networking/' },
+  { i: Cctv, t: 'CCTV & Security', d: 'IP and CCTV cameras, NVR/DVR systems, installation and remote viewing.', href: '/cctv-security/' },
+  { i: Keyboard, t: 'Computer Accessories', d: 'Accessories and IT hardware for offices, counters and homes.', href: '/products/' },
+];
+const values = [
+  { i: Target, t: 'Fit over hype', d: 'We recommend what solves your problem, explained in plain language.' },
+  { i: Compass, t: 'Clarity', d: 'Clear scope and honest expectations before any work begins.' },
+  { i: Handshake, t: 'Long-term relationships', d: 'We aim to be the team you call when your business grows.' },
+];
+---
+<Base
+  title="About Us — IT Solutions Company in Arifwala, Punjab"
+  description="NextGen I.T Solutions is an IT company in Arifwala, Punjab offering business software, networking, CCTV & security systems and computer accessories to businesses across Pakistan."
+  breadcrumbs={[{ name: 'About Us', path: '/about/' }]}>
+  <PageHero crumb="About Us" eyebrow="About us" title={site.tagline}
+    lead={`${site.name} is a technology company based in ${site.contact.city}, ${site.contact.region}. We help businesses across Pakistan bring software, networks and security systems together — so technology supports the business instead of getting in its way.`} />
+
+  <section class="container-x grid gap-12 pt-24 lg:grid-cols-2" aria-labelledby="story-h">
+    <div data-reveal>
+      <p class="eyebrow">Who we are</p>
+      <h2 id="story-h" class="h-section mt-4">Software and hardware, under one roof.</h2>
+    </div>
+    <div class="space-y-5 leading-relaxed text-muted" data-reveal>
+      <p>Most businesses do not need more technology — they need technology that works together. A POS system needs a reliable network. A camera system needs proper recording and remote access. Staff need accessories and hardware that simply work.</p>
+      <p>That is why we combine business software development with networking equipment, CCTV systems and computer accessories. One team understands the whole picture, from the counter software to the cable in the wall.</p>
+      <p class="rounded-xl border border-dashed border-amber-400/40 bg-amber-400/5 p-4 text-sm"><span class="placeholder-tag">Placeholder</span> Add your company history here — founding year, founder background and milestones — in <code class="text-fg">src/pages/about.astro</code>. Only include facts you can verify.</p>
+    </div>
+  </section>
+
+  <section class="container-x mt-28" aria-labelledby="areas-h">
+    <SectionHead id="areas-h" eyebrow="What we do" title="Four areas of expertise." />
+    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {areas.map(({ i: I, t, d, href }) => (
+        <a href={href} class="card card-hover block p-6" data-reveal>
+          <span class="icon-tile"><I class="size-5" aria-hidden="true" /></span>
+          <h3 class="mt-5 text-lg font-semibold">{t}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-muted">{d}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="mt-28 border-y border-line/60 bg-ink-900 py-24" aria-labelledby="val-h">
+    <div class="container-x">
+      <SectionHead id="val-h" eyebrow="How we think" title="What guides our work." center />
+      <div class="mt-14 grid gap-6 md:grid-cols-3">
+        {values.map(({ i: I, t, d }) => (
+          <div class="card p-7 text-center" data-reveal>
+            <span class="icon-tile mx-auto"><I class="size-5" aria-hidden="true" /></span>
+            <h3 class="mt-5 text-lg font-semibold">{t}</h3><p class="mt-2 text-sm text-muted">{d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  <CTA />
+</Base>

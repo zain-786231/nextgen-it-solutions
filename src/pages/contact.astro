@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import Social from '../components/Social.astro';
+import { MessageCircle, Phone, Mail, MapPin, Clock, Map } from '@lucide/astro';
+import { site, whatsappLink } from '../config/site';
+const c = site.contact;
+const address = [c.streetAddress, c.city, c.region, c.country].filter(Boolean).join(', ');
+---
+<Base
+  title="Contact Us — Get a Quote"
+  description="Contact NextGen I.T Solutions in Arifwala, Punjab for POS software, custom software, networking equipment, CCTV installation and computer accessories. Message us on WhatsApp or send an inquiry."
+  breadcrumbs={[{ name: 'Contact Us', path: '/contact/' }]}>
+  <PageHero crumb="Contact Us" eyebrow="Contact" title="Talk to our team."
+    lead="Ask about software, networking, CCTV or products. WhatsApp is the fastest way to reach us." />
+
+  <section class="container-x grid gap-10 pt-16 lg:grid-cols-[1fr_1.4fr]">
+    <div class="space-y-4">
+      <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" class="card card-hover flex items-center gap-4 p-5">
+        <span class="grid size-12 place-items-center rounded-xl bg-[#1faa59]/15 text-[#3ddc84]"><MessageCircle class="size-6" aria-hidden="true" /></span>
+        <span><span class="block font-semibold">WhatsApp</span><span class="block text-sm text-muted">Start a chat with our team</span></span>
+      </a>
+      <div class="card divide-y divide-line/60">
+        <div class="flex gap-4 p-5"><Phone class="mt-0.5 size-5 shrink-0 text-cyan" aria-hidden="true" /><div><p class="text-sm font-semibold">Phone</p>{c.phone ? <a class="text-sm text-muted hover:text-fg" href={`tel:${c.phone.replace(/\s/g, '')}`}>{c.phone}</a> : <span class="placeholder-tag">Phone — to be added</span>}</div></div>
+        <div class="flex gap-4 p-5"><Mail class="mt-0.5 size-5 shrink-0 text-cyan" aria-hidden="true" /><div><p class="text-sm font-semibold">Email</p>{c.email ? <a class="text-sm text-muted hover:text-fg" href={`mailto:${c.email}`}>{c.email}</a> : <span class="placeholder-tag">Email — to be added</span>}</div></div>
+        <div class="flex gap-4 p-5"><MapPin class="mt-0.5 size-5 shrink-0 text-cyan" aria-hidden="true" /><div><p class="text-sm font-semibold">Location</p><p class="text-sm text-muted">{address}</p>{!c.streetAddress && <span class="placeholder-tag">Street address — to be added</span>}</div></div>
+        <div class="flex gap-4 p-5"><Clock class="mt-0.5 size-5 shrink-0 text-cyan" aria-hidden="true" /><div><p class="text-sm font-semibold">Business hours</p>{c.hours ? <p class="text-sm text-muted">{c.hours}</p> : <span class="placeholder-tag">Hours — to be added</span>}</div></div>
+      </div>
+      <div class="card p-5"><p class="mb-3 text-sm font-semibold">Follow us</p><Social /></div>
+    </div>
+    <InquiryForm />
+  </section>
+
+  <section class="container-x mt-16" aria-labelledby="map-h">
+    <h2 id="map-h" class="mb-5 text-xl font-semibold">Find us</h2>
+    {c.mapEmbedUrl
+      ? <iframe src={c.mapEmbedUrl} title={`Map showing ${site.name} location`} class="aspect-[16/7] w-full rounded-2xl border border-line" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      : <div class="card grid-bg grid aspect-[16/9] place-items-center p-6 text-center sm:aspect-[16/6]">
+          <div><Map class="mx-auto size-8 text-muted" aria-hidden="true" /><p class="mt-3 font-medium">{c.city}, {c.region}</p><p class="mt-2"><span class="placeholder-tag">Google Maps embed — add mapEmbedUrl in src/config/site.ts</span></p></div>
+        </div>}
+  </section>
+</Base>
+
+<script>
+  // Prefill from product "Request Price" links: /contact/?service=...&product=...
+  const q = new URLSearchParams(location.search);
+  const form = document.getElementById('inquiry') as HTMLFormElement | null;
+  if (form) {
+    const svc = q.get('service'); const product = q.get('product');
+    const sel = form.querySelector<HTMLSelectElement>('select[name=service]');
+    if (svc && sel && [...sel.options].some((o) => o.value === svc)) sel.value = svc;
+    const msg = form.querySelector<HTMLTextAreaElement>('textarea[name=message]');
+    if (product && msg && !msg.value) msg.value = `Please share the price and availability of: ${product.slice(0, 120)}.`;
+  }
+</script>

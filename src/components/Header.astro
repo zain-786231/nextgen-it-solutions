@@ -1,0 +1,65 @@
+---
+import { Menu, X, MessageCircle, ArrowRight } from '@lucide/astro';
+import Logo from './Logo.astro';
+import { nav, whatsappLink } from '../config/site';
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => {
+  const h = href.replace(/\/$/, '') || '/';
+  return h === '/' ? path === '/' : path.startsWith(h);
+};
+---
+<header class="sticky top-0 z-50 border-b border-line/60 bg-ink-950/80 backdrop-blur-xl">
+  <div class="container-x flex h-[72px] items-center justify-between gap-6">
+    <Logo />
+    <nav aria-label="Main" class="hidden xl:block">
+      <ul class="flex items-center gap-1">
+        {nav.map((n) => (
+          <li>
+            <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}
+              class:list={['whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-medium transition', isActive(n.href) ? 'text-fg bg-white/[0.06]' : 'text-muted hover:text-fg']}>
+              {n.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="/contact/#inquiry" class="btn-primary hidden whitespace-nowrap !py-2.5 sm:inline-flex">Get a Quote <ArrowRight class="size-4" aria-hidden="true" /></a>
+      <button id="nav-toggle" type="button" class="grid size-11 place-items-center rounded-xl border border-line text-fg xl:hidden"
+        aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+        <Menu class="size-5 icon-open" aria-hidden="true" />
+        <X class="size-5 icon-close hidden" aria-hidden="true" />
+      </button>
+    </div>
+  </div>
+  <nav id="mobile-nav" aria-label="Mobile" class="hidden border-t border-line/60 bg-ink-950 xl:hidden">
+    <ul class="container-x flex flex-col py-4">
+      {nav.map((n) => (
+        <li>
+          <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}
+            class:list={['flex items-center justify-between border-b border-line/40 py-3.5 text-base font-medium', isActive(n.href) ? 'text-cyan' : 'text-fg']}>
+            {n.label}<ArrowRight class="size-4 text-muted" aria-hidden="true" />
+          </a>
+        </li>
+      ))}
+      <li class="mt-5 grid gap-3 sm:grid-cols-2">
+        <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" class="btn-wa w-full"><MessageCircle class="size-4" aria-hidden="true" /> Chat on WhatsApp</a>
+        <a href="/contact/#inquiry" class="btn-primary w-full">Get a Quote</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+<script>
+  const btn = document.getElementById('nav-toggle')!;
+  const menu = document.getElementById('mobile-nav')!;
+  const set = (open: boolean) => {
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menu.classList.toggle('hidden', !open);
+    btn.querySelector('.icon-open')!.classList.toggle('hidden', open);
+    btn.querySelector('.icon-close')!.classList.toggle('hidden', !open);
+  };
+  btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') { set(false); btn.focus(); } });
+  window.matchMedia('(min-width: 1280px)').addEventListener('change', (m) => m.matches && set(false));
+</script>

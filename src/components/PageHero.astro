@@ -1,0 +1,22 @@
+---
+import { ChevronRight } from '@lucide/astro';
+interface Props { eyebrow: string; title: string; lead: string; crumb: string }
+const { eyebrow, title, lead, crumb } = Astro.props;
+---
+<section class="relative overflow-hidden border-b border-line/60">
+  <div class="grid-bg absolute inset-0"></div>
+  <div class="glow absolute -top-40 left-1/2 size-[640px] -translate-x-1/2"></div>
+  <div class="container-x relative py-16 sm:py-24">
+    <nav aria-label="Breadcrumb" class="mb-8">
+      <ol class="flex items-center gap-1.5 text-xs text-muted">
+        <li><a href="/" class="hover:text-fg">Home</a></li>
+        <li aria-hidden="true"><ChevronRight class="size-3.5" /></li>
+        <li aria-current="page" class="text-fg">{crumb}</li>
+      </ol>
+    </nav>
+    <p class="eyebrow">{eyebrow}</p>
+    <h1 class="h-display mt-5 max-w-4xl">{title}</h1>
+    <p class="lead mt-6 max-w-2xl">{lead}</p>
+    <slot />
+  </div>
+</section>

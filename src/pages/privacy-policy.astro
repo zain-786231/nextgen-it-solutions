@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../config/site';
+const updated = 'November 11, 2026';
+---
+<Base title="Privacy Policy" description={`How ${site.name} handles information shared through this website, WhatsApp inquiries and contact forms.`}
+  breadcrumbs={[{ name: 'Privacy Policy', path: '/privacy-policy/' }]}>
+  <PageHero crumb="Privacy Policy" eyebrow="Legal" title="Privacy Policy" lead={`Last updated: ${updated}`} />
+  <article class="container-x max-w-3xl space-y-8 pt-16 leading-relaxed text-muted [&_h2]:mt-2 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-fg">
+    <p class="rounded-xl border border-dashed border-amber-400/40 bg-amber-400/5 p-4 text-sm"><span class="placeholder-tag">Review needed</span> This is a plain-language starting policy. Have it reviewed for your business before relying on it, and update it if you add analytics, a form service or other tools.</p>
+    <section><h2>Who we are</h2><p>This website is operated by {site.name}, {site.contact.city}, {site.contact.region}, {site.contact.country}.</p></section>
+    <section><h2>Information you share with us</h2><p>When you contact us through WhatsApp, phone, email or the inquiry form, you may share your name, business name, phone number, email address and details about your requirements. We use this only to respond to your inquiry, prepare quotes and provide the services you request.</p></section>
+    <section><h2>How the inquiry form works</h2><p>{site.formEndpoint
+      ? 'Inquiry form submissions are sent to a third-party form-handling service, which forwards them to us by email.'
+      : 'The inquiry form does not store your information on this website. Submitting it opens WhatsApp with your message pre-filled; your message is only sent when you press send in WhatsApp, and is then handled under WhatsApp\'s own privacy policy.'}</p></section>
+    <section><h2>Analytics and cookies</h2><p>{site.ga4Id
+      ? 'We use Google Analytics to understand how visitors use this website. Google Analytics uses cookies and collects information such as pages visited and approximate location. You can block these cookies through your browser settings.'
+      : 'This website does not currently use analytics or advertising cookies.'} Our hosting provider (Cloudflare) may process technical data such as IP addresses to deliver and secure the website.</p></section>
+    <section><h2>Sharing</h2><p>We do not sell your personal information. We share it only when needed to provide services you request or when required by law.</p></section>
+    <section><h2>Your choices</h2><p>You can ask us to update or delete the information you have shared with us by contacting us through the details on our <a href="/contact/" class="text-cyan hover:underline">contact page</a>.</p></section>
+    <section><h2>Changes</h2><p>We may update this policy from time to time. The date at the top shows when it was last changed.</p></section>
+  </article>
+</Base>

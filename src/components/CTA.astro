@@ -1,0 +1,24 @@
+---
+import { ArrowRight, MessageCircle } from '@lucide/astro';
+import { whatsappLink } from '../config/site';
+interface Props { title?: string; text?: string; waMessage?: string }
+const {
+  title = "Let's Build a Smarter Business Together.",
+  text = 'Tell us what your business needs. We will recommend a practical solution — software, networking, security or hardware.',
+  waMessage,
+} = Astro.props;
+---
+<section class="container-x mt-24" data-reveal>
+  <div class="relative overflow-hidden rounded-3xl border border-line bg-gradient-to-br from-ink-800 via-ink-900 to-ink-950 px-6 py-14 sm:px-14 sm:py-20">
+    <div class="grid-bg absolute inset-0"></div>
+    <div class="glow absolute -right-24 -top-24 size-[420px]"></div>
+    <div class="relative max-w-2xl">
+      <h2 class="h-section">{title}</h2>
+      <p class="lead mt-4">{text}</p>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a href="/contact/#inquiry" class="btn-primary">Request a Consultation <ArrowRight class="size-4" aria-hidden="true" /></a>
+        <a href={whatsappLink(waMessage)} target="_blank" rel="noopener noreferrer" class="btn-wa"><MessageCircle class="size-4" aria-hidden="true" /> Contact on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>

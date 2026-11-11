@@ -1,0 +1,114 @@
+---
+import '../styles/global.css';
+import { site } from '../config/site';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+
+interface Crumb { name: string; path: string }
+interface Props {
+  title: string;
+  description: string;
+  /** Extra JSON-LD objects for this page */
+  schema?: Record<string, unknown>[];
+  breadcrumbs?: Crumb[];
+  noindex?: boolean;
+}
+const { title, description, schema = [], breadcrumbs, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL('/og-image.png', site.url).href;
+const fullTitle = title.includes(site.name) ? title : `${title} | ${site.name}`;
+
+const sameAs = Object.values(site.social).filter(Boolean);
+const orgId = `${site.url}/#organization`;
+const business: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': orgId,
+  name: site.name,
+  description: site.description,
+  url: site.url,
+  logo: new URL('/icons/logo.svg', site.url).href,
+  image: ogImage,
+  slogan: site.tagline,
+  areaServed: { '@type': 'Country', name: 'Pakistan' },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: site.contact.city,
+    addressRegion: site.contact.region,
+    addressCountry: site.contact.countryCode,
+    ...(site.contact.streetAddress ? { streetAddress: site.contact.streetAddress } : {}),
+  },
+  ...(site.contact.phone ? { telephone: site.contact.phone } : {}),
+  ...(site.contact.email ? { email: site.contact.email } : {}),
+  ...(sameAs.length ? { sameAs } : {}),
+};
+const website = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: site.url,
+  publisher: { '@id': orgId },
+  inLanguage: 'en-PK',
+};
+const crumbSchema = breadcrumbs && {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [{ name: 'Home', path: '/' }, ...breadcrumbs].map((c, i) => ({
+    '@type': 'ListItem', position: i + 1, name: c.name, item: new URL(c.path, site.url).href,
+  })),
+};
+const isHome = Astro.url.pathname === '/';
+const jsonLd = [business, ...(isHome ? [website] : []), ...(crumbSchema ? [crumbSchema] : []), ...schema];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#080D18" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="en_PK" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {site.googleSiteVerification && <meta name="google-site-verification" content={site.googleSiteVerification} />}
+    {jsonLd.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+    <script is:inline>document.documentElement.classList.add('js')</script>
+    {site.ga4Id && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${site.ga4Id}`}></script>
+        <script is:inline define:vars={{ id: site.ga4Id }}>
+          window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', id);
+        </script>
+      </>
+    )}
+  </head>
+  <body class="min-h-screen overflow-x-hidden">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-blue focus:px-4 focus:py-2">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppFloat />
+    <script>
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      }, { rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

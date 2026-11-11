@@ -1,0 +1,26 @@
+---
+import ServicePage from '../components/ServicePage.astro';
+import { Camera, Cctv, HardDrive, Plug, MonitorSmartphone, Wrench } from '@lucide/astro';
+const items = [
+  { icon: Camera, title: 'IP Cameras', text: 'Network cameras for indoor and outdoor coverage, recorded on an NVR.' },
+  { icon: Cctv, title: 'CCTV Cameras', text: 'CCTV cameras for DVR-based systems, suited to many shops and homes.' },
+  { icon: HardDrive, title: 'NVR / DVR Systems', text: 'Recorders and storage to keep and review footage from your cameras.' },
+  { icon: Plug, title: 'Surveillance Accessories', text: 'Power supplies, cabling, connectors, mounts and storage drives.' },
+  { icon: MonitorSmartphone, title: 'Remote Monitoring', text: 'Set-up for viewing your cameras on a phone or computer when you are away.' },
+  { icon: Wrench, title: 'Installation & Configuration', text: 'Camera placement, cabling, recorder set-up and handover to your team.' },
+];
+---
+<ServicePage
+  seoTitle="CCTV Cameras & Security Systems in Arifwala"
+  seoDescription="IP cameras, CCTV cameras, NVR/DVR systems, surveillance accessories, remote monitoring and CCTV installation in Arifwala, Punjab, from NextGen I.T Solutions."
+  crumb="CCTV & Security" path="/cctv-security/"
+  eyebrow="CCTV & security systems" title="Security systems that keep watch over your business."
+  lead="We help you choose, install and configure camera systems for shops, warehouses, offices and factories — with recording and remote viewing set up properly."
+  kind="cctv" items={items} service="CCTV & Security Systems" productCategory="cctv"
+  approachTitle="Coverage first, then equipment."
+  approach={[
+    'Walk through the areas you need to cover: entrances, counters, stock and perimeter.',
+    'Recommend camera types, recorder and storage to match your coverage and retention needs.',
+    'Install neatly and configure recording, user access and remote viewing.',
+    'Show your team how to use the system and help when you need changes.',
+  ]} />

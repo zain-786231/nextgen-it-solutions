@@ -1,0 +1,26 @@
+---
+import ServicePage from '../components/ServicePage.astro';
+import { Router, Network, Wifi, RadioTower, Layers, Cable } from '@lucide/astro';
+const items = [
+  { icon: Router, title: 'Routers', text: 'Routers for internet connectivity in shops, offices and multi-room premises.' },
+  { icon: Network, title: 'Managed & Unmanaged Switches', text: 'Unmanaged switches for simple expansion; managed switches when you need VLANs and more control.' },
+  { icon: Wifi, title: 'Wireless Access Points', text: 'Access points to extend Wi‑Fi coverage across larger floors and buildings.' },
+  { icon: RadioTower, title: 'Network Bridges', text: 'Wireless point-to-point links to connect separate buildings without running cable.' },
+  { icon: Layers, title: 'Structured Networking', text: 'Planned cabling and rack layouts that are tidy, labelled and easier to maintain.' },
+  { icon: Cable, title: 'Networking Accessories', text: 'Ethernet cables, connectors, patch cords and other computer networking accessories.' },
+];
+---
+<ServicePage
+  seoTitle="Networking Equipment & IT Infrastructure in Pakistan"
+  seoDescription="Routers, managed and unmanaged switches, wireless access points, network bridges and structured networking for businesses in Arifwala and across Pakistan."
+  crumb="Networking Solutions" path="/networking/"
+  eyebrow="Networking & IT infrastructure" title="Reliable networks for shops, offices and industry."
+  lead="From a single router to a multi-building network, we supply and configure networking equipment so your systems, cameras and staff stay connected."
+  kind="network" items={items} service="Networking Solutions" productCategory="networking"
+  approachTitle="Planned around how you use the network."
+  approach={[
+    'Understand your premises, number of users and devices, and what must stay online.',
+    'Recommend equipment sized for your needs — avoiding both under- and over-buying.',
+    'Install, cable and configure so the network is organised and documented.',
+    'Support you with adjustments and troubleshooting after installation.',
+  ]} />

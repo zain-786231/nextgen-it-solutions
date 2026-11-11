@@ -1,0 +1,8 @@
+---
+import { Store, Scale, CodeXml, Boxes, Receipt, Workflow } from '@lucide/astro';
+const map = { store: Store, scale: Scale, code: CodeXml, boxes: Boxes, receipt: Receipt, workflow: Workflow } as const;
+interface Props { name: keyof typeof map; class?: string }
+const { name, class: cls = 'size-5' } = Astro.props;
+const C = map[name];
+---
+<C class={cls} aria-hidden="true" />

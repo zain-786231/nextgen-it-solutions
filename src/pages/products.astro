@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CTA from '../components/CTA.astro';
+import { MessageCircle, Mail, ImageOff } from '@lucide/astro';
+import { site, whatsappLink } from '../config/site';
+import { products, categories } from '../data/products';
+const catLabel = Object.fromEntries(categories.map((c) => [c.id, c.label]));
+const used = categories.filter((c) => products.some((p) => p.category === c.id));
+---
+<Base
+  title="IT Products — Networking, CCTV & Computer Accessories"
+  description="Browse networking devices, CCTV cameras, NVR/DVR recorders, computer accessories and IT hardware from NextGen I.T Solutions, Arifwala. Request prices on WhatsApp."
+  breadcrumbs={[{ name: 'Products', path: '/products/' }]}>
+  <PageHero crumb="Products" eyebrow="Product catalogue" title="Networking, security and IT hardware."
+    lead="Browse the product types we supply. This is an inquiry catalogue — prices and availability depend on brand, model and market, so ask us for a current quote." />
+
+  <section class="container-x pt-14" aria-labelledby="cat-h">
+    <h2 id="cat-h" class="sr-only">Filter products by category</h2>
+    <div class="flex flex-wrap gap-2" role="group" aria-label="Product categories" id="filters">
+      <button type="button" data-filter="all" aria-pressed="true" class="filter-btn">All products</button>
+      {used.map((c) => <button type="button" data-filter={c.id} aria-pressed="false" class="filter-btn">{c.label}</button>)}
+    </div>
+    <p class="mt-4 text-sm text-muted" aria-live="polite" id="count">{products.length} product types</p>
+
+    <ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="grid">
+      {products.map((p) => (
+        <li data-cat={p.category} class="card card-hover flex flex-col overflow-hidden">
+          <div class="relative aspect-[4/3] border-b border-line bg-gradient-to-br from-ink-900 to-ink-950">
+            {p.image
+              ? <img src={p.image} alt={p.name} loading="lazy" decoding="async" class="h-full w-full object-cover" />
+              : <div class="grid h-full place-items-center text-muted"><div class="flex flex-col items-center gap-2"><ImageOff class="size-7 opacity-60" aria-hidden="true" /><span class="placeholder-tag">Product photo to be added</span></div></div>}
+            {p.availability && <span class="absolute right-3 top-3 rounded-full bg-ink-950/90 px-2.5 py-1 text-[11px] font-medium text-cyan">{p.availability}</span>}
+          </div>
+          <div class="flex flex-1 flex-col p-5">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan">{catLabel[p.category]}</p>
+            <h3 class="mt-2 text-lg font-semibold">{p.name}</h3>
+            {(p.brand || p.model) && <p class="mt-1 text-xs text-muted">{[p.brand, p.model].filter(Boolean).join(' · ')}</p>}
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">{p.description}</p>
+            <div class="mt-5 grid grid-cols-2 gap-2">
+              <a href={`/contact/?service=${encodeURIComponent('Computer Accessories / IT Hardware')}&product=${encodeURIComponent(p.name)}#inquiry`} class="btn-ghost !px-3 !py-2.5 !text-xs"><Mail class="size-3.5" aria-hidden="true" />Request Price</a>
+              <a href={whatsappLink(`Hello ${site.name}, please share the price and availability of: ${p.name}${p.model ? ` (${p.model})` : ''}.`)} target="_blank" rel="noopener noreferrer" class="btn-wa !px-3 !py-2.5 !text-xs"><MessageCircle class="size-3.5" aria-hidden="true" />WhatsApp</a>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+  <CTA title="Looking for something specific?" text="If you do not see the item you need, send us the brand or model and we will check availability for you." waMessage={`Hello ${site.name}, I am looking for a product. Details: `} />
+</Base>
+
+<style>
+  .filter-btn { border-radius: 9999px; border: 1px solid var(--color-line); padding: .55rem 1rem; font-size: .875rem; font-weight: 500; color: var(--color-muted); transition: all .2s; }
+  .filter-btn:hover { color: var(--color-fg); border-color: rgb(40 120 255 / .6); }
+  .filter-btn[aria-pressed='true'] { background: #1f66e6; border-color: #1f66e6; color: #fff; }
+</style>
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('#filters [data-filter]');
+  const items = document.querySelectorAll<HTMLElement>('#grid [data-cat]');
+  const count = document.getElementById('count')!;
+  const apply = (cat: string, push = true) => {
+    if (![...buttons].some((b) => b.dataset.filter === cat)) cat = 'all';
+    let n = 0;
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === cat)));
+    items.forEach((i) => { const show = cat === 'all' || i.dataset.cat === cat; i.hidden = !show; if (show) n++; });
+    count.textContent = `${n} product type${n === 1 ? '' : 's'}`;
+    if (push) { const u = new URL(location.href); cat === 'all' ? u.searchParams.delete('category') : u.searchParams.set('category', cat); history.replaceState(null, '', u); }
+  };
+  buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter!)));
+  const initial = new URLSearchParams(location.search).get('category');
+  if (initial) apply(initial, false);
+</script>

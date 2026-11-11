@@ -1,0 +1,50 @@
+---
+import { Wifi, Cctv, ShieldCheck, Server } from '@lucide/astro';
+---
+<div class="relative mx-auto w-full max-w-[560px]" aria-hidden="true">
+  <div class="glow absolute -inset-10 opacity-80"></div>
+  <!-- Dashboard window -->
+  <div class="relative rounded-2xl border border-line bg-ink-800/90 p-3 shadow-[0_40px_80px_-30px_rgb(0_0_0/0.8)]">
+    <div class="flex items-center gap-1.5 px-2 pb-3">
+      <span class="size-2.5 rounded-full bg-blue"></span><span class="size-2.5 rounded-full bg-line"></span><span class="size-2.5 rounded-full bg-line"></span>
+      <span class="ml-3 h-2 w-28 rounded-full bg-line/80"></span>
+    </div>
+    <div class="grid grid-cols-[88px_1fr] gap-3 rounded-xl bg-ink-950/70 p-3">
+      <div class="space-y-2.5 rounded-lg bg-ink-900 p-3">
+        <div class="h-2 w-10 rounded-full bg-gradient-to-r from-blue to-cyan"></div>
+        {[14, 10, 12, 9, 11].map((w) => <div class="h-2 rounded-full bg-line" style={`width:${w * 4}px`}></div>)}
+      </div>
+      <div class="space-y-3">
+        <div class="grid grid-cols-3 gap-2">
+          {['bg-blue', 'bg-cyan', 'bg-fg/80'].map((c) => (
+            <div class="rounded-lg bg-ink-900 p-2.5"><div class="h-1.5 w-8 rounded-full bg-line"></div><div class:list={['mt-2 h-2.5 w-12 rounded-full', c]}></div></div>
+          ))}
+        </div>
+        <div class="rounded-lg bg-ink-900 p-3">
+          <svg viewBox="0 0 260 90" class="h-24 w-full">
+            <defs><linearGradient id="hg" x1="0" x2="1"><stop stop-color="#2878FF" /><stop offset="1" stop-color="#20D9E8" /></linearGradient>
+            <linearGradient id="hf" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#2878FF" stop-opacity=".3" /><stop offset="1" stop-color="#2878FF" stop-opacity="0" /></linearGradient></defs>
+            <path d="M0 70 L30 58 L60 62 L90 40 L120 46 L150 28 L180 34 L210 18 L260 22 L260 90 L0 90Z" fill="url(#hf)" />
+            <path d="M0 70 L30 58 L60 62 L90 40 L120 46 L150 28 L180 34 L210 18 L260 22" fill="none" stroke="url(#hg)" stroke-width="2.5" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="space-y-2 rounded-lg bg-ink-900 p-3">
+          {[0, 1, 2].map((i) => <div class="flex items-center gap-2"><div class="size-2 rounded-full bg-cyan/70"></div><div class="h-1.5 flex-1 rounded-full bg-line"></div><div class="h-1.5 w-10 rounded-full bg-line/70"></div></div>)}
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Floating device chips -->
+  <div class="anim-float absolute -left-4 top-1/3 hidden items-center gap-3 rounded-xl border border-line bg-ink-900/95 px-3.5 py-3 shadow-xl sm:flex">
+    <span class="icon-tile size-9"><Wifi class="size-4" /></span>
+    <span><span class="block text-xs font-semibold">Network</span><span class="block text-[11px] text-muted">Switches · Access points</span></span>
+  </div>
+  <div class="anim-float absolute -right-3 -top-5 hidden items-center gap-3 rounded-xl border border-line bg-ink-900/95 px-3.5 py-3 shadow-xl sm:flex" style="animation-delay:1.5s">
+    <span class="icon-tile size-9"><Cctv class="size-4" /></span>
+    <span><span class="block text-xs font-semibold">Surveillance</span><span class="block text-[11px] text-muted">IP cameras · NVR</span></span>
+  </div>
+  <div class="anim-float absolute -bottom-6 right-6 hidden items-center gap-3 rounded-xl border border-line bg-ink-900/95 px-3.5 py-3 shadow-xl sm:flex" style="animation-delay:3s">
+    <span class="icon-tile size-9"><Server class="size-4" /></span>
+    <span class="flex items-center gap-1.5 text-xs font-semibold">Systems connected <ShieldCheck class="size-3.5 text-cyan" /></span>
+  </div>
+</div>

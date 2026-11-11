@@ -1,0 +1,91 @@
+---
+import { Send, Info } from '@lucide/astro';
+import { site, serviceOptions } from '../config/site';
+interface Props { defaultService?: string; id?: string; heading?: string }
+const { defaultService = '', id = 'inquiry', heading = 'Send us an inquiry' } = Astro.props;
+const usesBackend = !!site.formEndpoint;
+---
+<form id={id} class="inquiry-form card scroll-mt-28 p-6 sm:p-8" novalidate
+  data-endpoint={site.formEndpoint ?? ''} data-wa={site.contact.whatsapp ?? ''} data-business={site.name}>
+  <h2 class="text-xl font-semibold">{heading}</h2>
+  <p class="mt-1.5 text-sm text-muted">Fields marked <span class="text-cyan">*</span> are required.</p>
+  <div class="mt-6 grid gap-5 sm:grid-cols-2">
+    <div><label class="label" for={`${id}-name`}>Name <span class="text-cyan">*</span></label>
+      <input class="field" id={`${id}-name`} name="name" autocomplete="name" required maxlength="80" /></div>
+    <div><label class="label" for={`${id}-business`}>Business Name</label>
+      <input class="field" id={`${id}-business`} name="business" autocomplete="organization" maxlength="100" /></div>
+    <div><label class="label" for={`${id}-phone`}>Phone Number <span class="text-cyan">*</span></label>
+      <input class="field" id={`${id}-phone`} name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="03XX XXXXXXX" pattern="^[+0-9\s\-]{10,16}$" /></div>
+    <div><label class="label" for={`${id}-email`}>Email</label>
+      <input class="field" id={`${id}-email`} name="email" type="email" autocomplete="email" maxlength="120" /></div>
+    <div class="sm:col-span-2"><label class="label" for={`${id}-service`}>Service Interested In <span class="text-cyan">*</span></label>
+      <select class="field" id={`${id}-service`} name="service" required>
+        <option value="" disabled selected={!defaultService}>Select a service</option>
+        {serviceOptions.map((s) => <option selected={s === defaultService}>{s}</option>)}
+      </select></div>
+    <div class="sm:col-span-2"><label class="label" for={`${id}-message`}>Message <span class="text-cyan">*</span></label>
+      <textarea class="field min-h-32" id={`${id}-message`} name="message" required minlength="10" maxlength="1500" placeholder="Tell us about your business and what you need."></textarea></div>
+    <!-- Honeypot: hidden from people, bots tend to fill it -->
+    <div class="absolute -left-[9999px]" aria-hidden="true"><label>Leave empty<input name="company_website" tabindex="-1" autocomplete="off" /></label></div>
+  </div>
+  <p class="form-error mt-4 hidden text-sm text-red-300" role="alert"></p>
+  <p class="form-status mt-4 hidden rounded-xl border border-cyan/30 bg-cyan/10 p-3 text-sm text-fg" role="status"></p>
+  <button type="submit" class="btn-primary mt-6 w-full sm:w-auto">
+    <Send class="size-4" aria-hidden="true" /> {usesBackend ? 'Send Inquiry' : 'Send Inquiry via WhatsApp'}
+  </button>
+  {!usesBackend && (
+    <p class="mt-4 flex gap-2 text-xs leading-relaxed text-muted"><Info class="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
+      Submitting opens WhatsApp with your details pre-filled. Your inquiry is sent only when you press send in WhatsApp. Nothing is stored on this website.</p>
+  )}
+</form>
+
+<script>
+  const MIN_FILL_MS = 2500;
+  document.querySelectorAll<HTMLFormElement>('form.inquiry-form').forEach((form) => {
+    const started = Date.now();
+    const err = form.querySelector<HTMLElement>('.form-error')!;
+    const status = form.querySelector<HTMLElement>('.form-status')!;
+    const show = (el: HTMLElement, msg: string) => { el.textContent = msg; el.classList.remove('hidden'); };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      err.classList.add('hidden'); status.classList.add('hidden');
+      const fields = Array.from(form.querySelectorAll<HTMLInputElement>('input[name]:not([name=company_website]), select, textarea'));
+      let firstBad: HTMLElement | null = null;
+      for (const f of fields) {
+        f.value = f.value.trim();
+        const ok = f.checkValidity();
+        f.setAttribute('aria-invalid', String(!ok));
+        if (!ok && !firstBad) firstBad = f;
+      }
+      if (firstBad) { show(err, 'Please complete the required fields correctly (name, a valid phone number, service and a message of at least 10 characters).'); firstBad.focus(); return; }
+
+      const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      // Basic spam protection: honeypot + minimum time on form
+      if (data.company_website || Date.now() - started < MIN_FILL_MS) { show(status, 'Thank you.'); return; }
+      delete data.company_website;
+
+      const endpoint = form.dataset.endpoint;
+      if (endpoint) {
+        try {
+          const res = await fetch(endpoint, { method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+          if (!res.ok) throw new Error(String(res.status));
+          form.reset(); show(status, 'Thank you — your inquiry has been sent. We will get back to you.');
+        } catch { show(err, 'Sorry, the message could not be sent. Please try again or contact us on WhatsApp.'); }
+        return;
+      }
+      const lines = [
+        `New inquiry for ${form.dataset.business}`,
+        `Name: ${data.name}`,
+        data.business ? `Business: ${data.business}` : null,
+        `Phone: ${data.phone}`,
+        data.email ? `Email: ${data.email}` : null,
+        `Service: ${data.service}`,
+        '', data.message,
+      ].filter((l): l is string => l !== null);
+      const url = `https://wa.me/${form.dataset.wa ?? ''}?text=${encodeURIComponent(lines.join('\n'))}`;
+      window.open(url, '_blank', 'noopener');
+      show(status, 'WhatsApp has opened in a new tab with your inquiry pre-filled. Please press send in WhatsApp to deliver it.');
+    });
+  });
+</script>
