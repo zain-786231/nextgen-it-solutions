@@ -1,11 +1,12 @@
+
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
-// Update `site` when you move to a custom domain (see docs/CLOUDFLARE_DEPLOYMENT.md)
+// Production website URL
 export default defineConfig({
-  site: 'https://nextgenitsolutions.pages.dev',
+  site: 'https://nextgen-it-solutions.zainulabiden690.workers.dev',
   trailingSlash: 'ignore',
   integrations: [sitemap()],
   vite: { plugins: [tailwindcss()] },

@@ -16,7 +16,7 @@ export const site = {
     'NextGen I.T Solutions in Arifwala, Pakistan provides custom business software, POS software, networking equipment, CCTV & security systems and computer accessories.',
 
   /** Production URL. Change when you connect a custom domain. */
-  url: 'https://nextgenitsolutions.pages.dev',
+ url: 'https://nextgen-it-solutions.zainulabiden690.workers.dev',
 
   contact: {
     /**
